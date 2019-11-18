@@ -1,12 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{% block title %}{{ app_name }}{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <body id="{% block body_id %}{% endblock %}" class="bg-light">
+        <div id="content-wrapper">
+            {% block header %}
+                <header id="content-header" class="top-shadow bg-white">
+
+                </header>
+            {% endblock %}
+        
+            {% block body %}
+                <div class="container pt-4" id="{% block bodyId %}defaultBodyId{% endblock %}">
+                    <div class="row">
+                        <div id="main" class="col" v-cloak>
+                            {% block main %}{% endblock %}
+                        </div>
+                    </div>
+                    <div class="row mb-5" v-cloak>
+                        {% block subBody %}{% endblock %}
+                    </div>
+                </div>
+            {% endblock %}
+            {% block footer %}
+                <footer id="content-footer" class="border-top">
+                    <div class="container">
+                        <div class="row">
+                        <div class="col-sm-9">Copyright</div>
+                        <div class="col-sm-3 text-right">momo <b>{{ app_version }}</b></div>
+                        </div>
+                    </div>
+                </footer>
+            {% endblock %}
+            {% block javascripts %}
+                {{ encore_entry_script_tags('app') }}
+            {% endblock %}
+        </div>
     </body>
 </html>

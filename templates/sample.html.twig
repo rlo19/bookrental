@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block bodyId 'admin-site' %}
+
+{% block main %}
+<div v-if="!siteInfo">
+    {{ page_header('Site Management', 'admin.geo.site/Site_Management') }}
+    <div class="card shadow-sm card-table">
+        <div class="card-header">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="input-group input-group-sm" role="group" aria-label="Search">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" v-model="filterKey" />
+                </div>
+                <div class="input-group input-group-sm" role="group" aria-label="Preferred Filter">                    
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            Preferred
+                        </div>
+                    </div>
+                    <select class="custom-select form-control" v-model="preferredChoice">
+                        <option selected value=''>-- All --</option>
+                        <option>Y</option>
+                        <option>N</option>
+                    </select>
+                </div> 
+                <div class="input-group input-group-sm" role="group" aria-label="Status Filter">                    
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            Status
+                        </div>
+                    </div>
+                    <select class="custom-select form-control" v-model="statusChoice">
+                        <option selected value=''>-- All --</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <admin-catalog
+            v-if="rows"
+            :cols="cols"
+            :rows="rows"
+            :filter-key="filterKey"      
+            :table="'table-selectable'"   
+            :preferred-choice="preferredChoice"
+            :status-choice="statusChoice"    
+            @row-info="rowInfos"
+        ></admin-catalog>
+    </div>
+</div>
+<div v-else>
+    {{ page_header('Site Information', 'admin.geo.site.detail/Site_Management') }}
+    <site-info
+        :site-info="siteInfo"
+        :country-list="countryList"
+        :token="{{ csrf_token('site_info') | json_encode }}"
+        :view-all="true"
+        @back="refresh"
+    >
+    </site-info>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }} 
+    {{ encore_entry_script_tags('home') }}
+{% endblock %}
